@@ -1,28 +1,45 @@
-/* Точка входа в код ядра */
+/**
+ * Just because you can not compile the kernel. You must collect a special
+ * kind of executable code aligned on the border in 4Kb pages. This is
+ * done if you specify linker linking rules.
+ */
+
+
+
+/* The entry point to the kernel source code: */
 ENTRY (init)
+
 
 SECTIONS
 {
-/* Адрес, с которого будет начинаться код ядра в памяти */
+    /* The address from which the code will start in kernel memory: */
     . = 0x00100000;
-/* Секция кода */
 
+
+    /* Code section: */
     .text ALIGN (0x1000) :
     {
         *(.mboot)
         *(.text)
     }
-/* Секция инициализированных данных */
+
+
+    /* Section initialized data: */
     .data ALIGN (0x1000) :
     {
         *(.data)
     }
-/* Секция неинициализированных данных */    
 
+
+    /* Section uninitialized data: */
     .bss :
     {
         *(.bss)
     }
-/* Место в памяти, где уже нет кода ядра */
-    end = .; _end = .; __end = .;  
+
+
+    /* Location in memory where there is no kernel code: */
+    end = .;
+    _end = .;
+    __end = .;
 }
