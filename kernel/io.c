@@ -1,8 +1,11 @@
-#include "stdint.h"
+#include "io.h"
 
 
 
 
+/**
+ * Writing int the I/O port values.
+ */
 void outb(uint16_t port, uint8_t value) {
     __asm__ __volatile__ (
         "outb %1, %0"
@@ -14,6 +17,9 @@ void outb(uint16_t port, uint8_t value) {
 
 
 
+/**
+ * Reading the value of the I/O port.
+ */
 uint8_t inb(uint16_t port) {
     uint8_t result;
 

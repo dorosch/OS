@@ -2,7 +2,7 @@
 SOURCES=boot/loader.o kernel/kernel.o kernel/io.o
 
 # Флаги компилятора языка C
-CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -m32 -g -pedantic -std=c89 -ansi -I stdlib/include/ -I inlcude/
+CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -m32 -g -pedantic -std=c89 -ansi -I stdlib/include/ -I include/
 
 # Флаги компоновщика
 LDFLAGS=-T link.ld -m elf_i386
