@@ -58,13 +58,12 @@ Install `GRUB`:
 
 ```Bash
 $ make
+$ sudo make install
 ```
 
 
-### Run QEMU
+### Run
 
 ```Bash
-# cp bin/kernel /mnt/boot
-# cp boot/grub.cfg /mnt/boot/grub
-# qemu-system-x86_64 /home/andrey/OS/hard_disk.img
+$ sudo make run
 ```
