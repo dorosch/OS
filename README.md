@@ -3,7 +3,16 @@
 This operating system kernel for x86_32 processor. As bootloader used GRUB. To emulation use QEMU.
 
 
-### How to start
+### Quick start
+
+Make and run:
+```Bash
+$ make
+$ qemu-system-i386 -kernel bin/kernel
+```
+
+
+### Assembling a boot disk
 
 Create raw-image:
 ```Bash
@@ -53,17 +62,14 @@ Install `GRUB`:
 # grub-install --root-directory=/mnt  /dev/loop0
 ```
 
-
-### Building the kernel
-
+Building the kernel:
 ```Bash
 $ make
 $ sudo make install
 ```
 
 
-### Run
-
+And run:
 ```Bash
 $ sudo make run
 ```
