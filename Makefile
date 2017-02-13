@@ -20,3 +20,10 @@ clean:
 # Правило компоновки
 link:
 	ld $(LDFLAGS) $(SOURCES) -o bin/kernel
+
+install:
+	-sh install.sh
+
+# Правило запуска
+run:
+	sudo qemu-system-x86_64 hard_disk.img
