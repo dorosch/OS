@@ -5,7 +5,7 @@ SOURCES=boot/init.o kernel/kernel.o
 CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -m32 -g -pedantic -std=c89 -ansi -Werror
 
 # Флаги компоновщика
-LDFLAGS=-T boot/link.ld -m elf_i386
+LDFLAGS=-T link.ld -m elf_i386
 
 # Флаги ассемблера
 ASFLAGS=-m32
