@@ -1,8 +1,8 @@
 # Исходные объектные модули
-SOURCES=boot/loader.o kernel/kernel.o
+SOURCES=boot/loader.o kernel/kernel.o kernel/io.o
 
 # Флаги компилятора языка C
-CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -m32 -g -pedantic -std=c89 -ansi
+CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -m32 -g -pedantic -std=c89 -ansi -I stdlib/include/ -I inlcude/
 
 # Флаги компоновщика
 LDFLAGS=-T link.ld -m elf_i386
