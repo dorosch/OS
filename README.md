@@ -64,7 +64,7 @@ $ make
 ### Run QEMU
 
 ```Bash
-# cp hard_disk.img /mnt/boot
+# cp bin/kernel /mnt/boot
 # cp boot/grub.cfg /mnt/boot/grub
 # qemu-system-x86_64 /home/andrey/OS/hard_disk.img
 ```
