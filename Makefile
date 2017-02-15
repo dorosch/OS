@@ -1,26 +1,27 @@
-DEBUG=-g
-INCLUDE=-I stdc/include/ -I include/
-NO_STDLIB=-nostdlib -nostdinc
-CFLAGS= $(NO_STDLIB) -fno-builtin -fno-stack-protector -m32 -pedantic -std=c89 -ansi $(DEBUG) $(INCLUDE)
-LDFLAGS=-T link.ld -m elf_i386
+include lib/Makefile
+
+
+.PHONY: all kernel
+
+DEBUG=-g -Wall -pedantic
+INCLUDE=-I stdc/include/ -I include/ -I include/libc/
+NO_STDLIB=-nostdlib -nostdinc -fno-builtin -fno-stack-protector
+CFLAGS=-m32 -std=c89 $(NO_STDLIB) $(DEBUG) $(INCLUDE)
+LDFLAGS=-T boot/link.ld -m elf_i386
 ASFLAGS=-m32
-SOURCES=boot/loader.o kernel/kernel.o kernel/io.o
+
+OBJECTS=boot/loader.o kernel/kernel.o kernel/io.o
+LIBRARIES=lib/libc.a
 
 
 
-all: $(SOURCES) link
+all: $(OBJECTS) kernel
 
-link:
-	ld $(INCLUDE) $(LDFLAGS) $(SOURCES) -o bin/kernel
-
-install:
-	-sh install.sh
-
-run:
-	sudo qemu-system-x86_64 hard_disk.img
+kernel: $(LIBRARIES) $(OBJECTS)
+	ld $(LDFLAGS) $(OBJECTS) $(LIBRARIES) -o bin/kernel
 
 test:
 	qemu-system-i386 -kernel bin/kernel
 
-clean:
+clean: lib_clean
 	rm -f boot/*.o kernel/*.o bin/kernel
