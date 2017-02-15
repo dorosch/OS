@@ -19,3 +19,15 @@ int strlen(const char *string) {
 
     return --start - string;
 }
+
+
+
+void *memset(void *start, int symbol, size_t number) {
+    unsigned char *pointer = start;
+
+    while (number--) {
+        *pointer++ = (unsigned char)symbol;
+    }
+
+    return start;
+}

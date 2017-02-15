@@ -1,12 +1,12 @@
 #ifndef __STRING_H__
 #define __STRING_H__
 
-/* Result sizeof operator */
-typedef unsigned int size_t;
+#include "stddef.h"
 
 /**
  * Prototypes of string functions
  */
 int strlen(const char * );
+void *memset(void *, int , size_t );
 
 #endif
