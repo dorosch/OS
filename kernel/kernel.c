@@ -92,12 +92,10 @@ void write_string_on_display(char *string) {
 
 
 int kernel_main(void) {
-    void init_interrupts();
+    init_interrupts();
 
-    char *string = "Kernel say: 'Hello World!'";
 
     clear_display();
-    write_string_on_display(string);
 
     return 0;
 }
