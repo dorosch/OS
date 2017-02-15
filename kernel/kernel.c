@@ -1,3 +1,8 @@
+#include "kernel/interrupts.h"
+
+
+
+
 /* Display color ; FG | BG */
 /* Text color: */
 #define BG_BLACK           0x00
@@ -87,6 +92,8 @@ void write_string_on_display(char *string) {
 
 
 int kernel_main(void) {
+    void init_interrupts();
+
     char *string = "Kernel say: 'Hello World!'";
 
     clear_display();

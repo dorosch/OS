@@ -10,7 +10,7 @@ CFLAGS=-m32 -std=c89 $(NO_STDLIB) $(DEBUG) $(INCLUDE)
 LDFLAGS=-T boot/link.ld -m elf_i386
 ASFLAGS=-m32
 
-OBJECTS=boot/loader.o kernel/kernel.o kernel/io.o
+OBJECTS=boot/loader.o kernel/kernel.o kernel/io.o kernel/interrupts.o
 LIBRARIES=lib/libc.a
 
 
