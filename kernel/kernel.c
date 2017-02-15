@@ -16,7 +16,7 @@
 #define BG_LIGHT_MAGENTA   0x0d
 #define BG_LIGHT_BROWN     0x0e
 #define BG_WHITE           0x0f
-/* Foreground color: */
+
 #define FG_BLACK           0x00
 #define FG_BLUE            0x10
 #define FG_GREEN           0x20
@@ -53,7 +53,7 @@ void clear_display(void) {
         /* blank character */
         monitor[position] = ' ';
         /* attribute-byte - light grey on black screen */
-        /*monitor[position+1] = 0x0f;*/
+        /*monitor[position+1] = 0x0f; */
         monitor[position+1] = BG_BLACK;
         /* each element takes 2 bytes */
         position = position + 2;
@@ -85,16 +85,12 @@ void write_string_on_display(char *string) {
 
 
 
+
 int kernel_main(void) {
     char *string = "Kernel say: 'Hello World!'";
 
     clear_display();
     write_string_on_display(string);
-
-
-    while (1) {
-
-    }
 
     return 0;
 }

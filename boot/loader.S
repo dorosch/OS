@@ -51,5 +51,9 @@
 /* The main entry point: */
 init:
     cli                  /* Enable all system interrupts. */
-	push    %ebx         /* Put the stack pointer to multiboot-structure. */
-	call    kernel_main  /* Call the main function of the kernel */
+    push    %ebx         /* Put the stack pointer to multiboot-structure. */
+    call    kernel_main  /* Call the main function of the kernel */
+    hlt
+
+loop:
+    jmp loop
