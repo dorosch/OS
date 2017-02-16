@@ -3,42 +3,70 @@
 
 
 
-struct tty_driver_descriptor __tty_driver;
+static struct tty_driver_descriptor _tty;
 
 
 void init_driver_tty() {
-    uint8_t cursor_x;
-    uint8_t cursor_y;
+    _tty.width = 80;
+    _tty.height = 25;
+    _tty.cursor_x = 0;
+    _tty.cursor_y = 0;
+    _tty.attribute = 0x0f;
+    _tty.video_memory = (uint16_t *)(0xB8000);
 
-    cursor_x = *((uint8_t *)0x451);
-    cursor_y = *((uint8_t *)0x450);
-
-    __tty_driver.tty = (uint16_t *)0xB8000;
-    __tty_driver.port = *((uint16_t *)0x463);
-    __tty_driver.attribute = FG_WHITE | BG_BLACK;
-    __tty_driver.width = *((uint16_t *)0x44A);
-    __tty_driver.height = 25;
-    __tty_driver.cursor = (cursor_x * __tty_driver.width) + cursor_y;
+    driver_tty_clear_screen();
 }
 
 
 
 void driver_tty_clear_screen() {
-    uint32_t size;
+    uint16_t size;
     uint16_t attribute;
 
-    attribute = (__tty_driver.attribute << 8) + ' ';
-    size = __tty_driver.width * __tty_driver.height;
+    size = _tty.width * _tty.height;
+    attribute = _tty.attribute << 8;
 
-    memset_word(__tty_driver.tty, attribute, size);
-    /* driver_tty_move_cursor_to(0); */
+    memset_word(_tty.video_memory, attribute, size);
+
+    _tty.cursor_x = 0;
+    _tty.cursor_y = 0;
+
+    driver_tty_update_cursor();
+}
+
+
+
+
+void driver_tty_update_cursor() {
+    uint16_t location;
+
+    location = (_tty.cursor_y * _tty.width) + _tty.cursor_x;
+
+    write_port(0x3D4, 14);
+    write_port(0x3D5, location >> 8);
+    write_port(0x3D4, 15);
+    write_port(0x3D5, location);
 }
 
 
 
 void driver_tty_output_char(char symbol) {
-    __tty_driver.tty[__tty_driver.cursor++] = symbol;
-    __tty_driver.tty[__tty_driver.cursor++] = __tty_driver.attribute;
+    uint16_t offset;
+    uint16_t *location;
+    uint16_t attribute = _tty.attribute << 8;
+
+    if (symbol == '\n') {
+        _tty.cursor_x = 0;
+        _tty.cursor_y++;
+    }
+    else {
+        offset = (_tty.cursor_y * _tty.width) + _tty.cursor_x;
+        location = _tty.video_memory + offset;
+        *location = symbol | attribute;
+        _tty.cursor_x++;
+    }
+
+    driver_tty_update_cursor();
 }
 
 
