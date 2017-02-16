@@ -36,7 +36,6 @@ void driver_tty_clear_screen() {
 
 
 
-
 void driver_tty_update_cursor() {
     uint16_t location;
 

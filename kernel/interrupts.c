@@ -13,8 +13,8 @@ IRQ_HANDLER(timer_int_handler) {
 
 
 IRQ_HANDLER(keyboard_int_handler) {
-    uint8_t key_code;
     uint8_t status;
+    uint8_t key_code;
 
     key_code = read_port(0x60);
     status = read_port(0x61);
@@ -48,19 +48,19 @@ void init_interrupts() {
     set_entry_IDT(0x20, (uint32_t)&timer_int_handler, 0x08, 0x8E);
     set_entry_IDT(0x21, (uint32_t)&keyboard_int_handler, 0x08, 0x8E);
 
-    /*  */
     __asm__("sti");
 }
 
 
 
 void load_IDT() {
-    uint16_t IDT_size = IDT_number * sizeof(struct IDT_entry);
+    uint16_t IDT_size;
 
-    memset(IDT_table, 0, IDT_size);
-
+    IDT_size = IDT_number * sizeof(struct IDT_entry);
     IDT_pointer.number = IDT_size - 1;
     IDT_pointer.base = (uint32_t)&IDT_table;
+
+    memset(IDT_table, 0, IDT_size);
 
     __asm__ (
         "lidt %0"
