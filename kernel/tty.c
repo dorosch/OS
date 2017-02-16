@@ -53,7 +53,6 @@ void driver_tty_update_cursor() {
 void driver_tty_output_char(char symbol) {
     uint16_t offset;
     uint16_t *location;
-    uint16_t attribute = _tty.attribute << 8;
 
     if (symbol == '\n') {
         _tty.cursor_x = 0;
@@ -62,7 +61,7 @@ void driver_tty_output_char(char symbol) {
     else {
         offset = (_tty.cursor_y * _tty.width) + _tty.cursor_x;
         location = _tty.video_memory + offset;
-        *location = symbol | attribute;
+        *location = symbol | (_tty.attribute << 8);
         _tty.cursor_x++;
     }
 
