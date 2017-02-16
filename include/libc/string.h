@@ -8,5 +8,6 @@
  */
 int strlen(const char * );
 void *memset(void *, int , size_t );
+void *memset_word(void *, short , size_t );
 
 #endif

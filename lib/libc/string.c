@@ -31,3 +31,15 @@ void *memset(void *start, int symbol, size_t number) {
 
     return start;
 }
+
+
+
+void *memset_word(void *start, short symbol, size_t number) {
+    unsigned short *pointer = start;
+
+    while (number--) {
+        *pointer++ = (unsigned short)symbol;
+    }
+
+    return start;
+}
