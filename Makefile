@@ -4,13 +4,13 @@ include lib/Makefile
 .PHONY: all kernel
 
 DEBUG=-g -Wall -pedantic
-INCLUDE=-I stdc/include/ -I include/ -I include/libc/
+INCLUDE=-I include/ -I include/libc/
 NO_STDLIB=-nostdlib -nostdinc -fno-builtin -fno-stack-protector
 CFLAGS=-m32 -std=c89 $(NO_STDLIB) $(DEBUG) $(INCLUDE)
 LDFLAGS=-T boot/link.ld -m elf_i386
 ASFLAGS=-m32
 
-OBJECTS=boot/loader.o kernel/kernel.o kernel/io.o kernel/interrupts.o
+OBJECTS=boot/loader.o kernel/kernel.o kernel/io.o kernel/interrupts.o kernel/tty.o
 LIBRARIES=lib/libc.a
 
 

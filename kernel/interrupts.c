@@ -13,20 +13,14 @@ IRQ_HANDLER(timer_int_handler) {
 
 
 IRQ_HANDLER(keyboard_int_handler) {
-    char *monitor;
-    unsigned int position;
     uint8_t key_code;
     uint8_t status;
-
-    position = 0;
-    monitor = (char *)0xb8000;
 
     key_code = read_port(0x60);
     status = read_port(0x61);
     write_port(0x61, status | 1);
 
-    monitor[position++] = key_code - 81;
-    monitor[position++] = 0x0f;
+    driver_tty_output_char(key_code);
 }
 
 
