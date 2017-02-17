@@ -2,7 +2,7 @@
 #define __IDT_H__
 
 #include "kernel/io.h"
-#include "kernel/tty.h"
+#include "kernel/drivers/tty.h"
 
 #include "stdint.h"
 #include "string.h"

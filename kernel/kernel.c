@@ -1,5 +1,5 @@
-#include "kernel/tty.h"
 #include "kernel/interrupts.h"
+#include "kernel/drivers/tty.h"
 
 
 
