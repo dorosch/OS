@@ -19,7 +19,7 @@
 #define IRQ_base        0x20
 
 
-struct IDT_entry {
+struct interrupt_descriptor_table {
     uint16_t lowerbits_0_15;
     uint16_t selector;
     uint8_t zero;
@@ -27,15 +27,13 @@ struct IDT_entry {
     uint16_t higherbits_16_31;
 } __attribute__((packed));
 
-struct IDT_pointer {
-  uint16_t number;
-  uint32_t base;
-} __attribute__((packed));
+struct interrupt_descriptor_table _idt[IDT_number];
 
 
 void init_interrupts();
-void load_IDT();
-void set_entry_IDT(uint8_t , uint32_t , uint16_t , uint8_t );
+void _load_interrupt_descriptor_table();
+void _register_all_interrupts_handler();
+void set_interrupt_handler(uint8_t , uint32_t , uint16_t , uint8_t );
 
 
 

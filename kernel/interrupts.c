@@ -3,30 +3,10 @@
 
 
 
-struct IDT_entry IDT_table[IDT_number];
-struct IDT_pointer IDT_pointer;
-
-
-IRQ_HANDLER(timer_int_handler) {
-    (*((char*)(0xB8000 + 79 * 2)))++;
-}
-
-
-IRQ_HANDLER(keyboard_int_handler) {
-    uint8_t status;
-    uint8_t key_code;
-
-    key_code = read_port(0x60);
-    status = read_port(0x61);
-    write_port(0x61, status | 1);
-
-    driver_tty_output_char(key_code);
-}
-
-
-
 void init_interrupts() {
-    load_IDT();
+    _load_interrupt_descriptor_table();
+
+    _register_all_interrupts_handler();
 
     /* ICW1 - begin initialization PIC */
     write_port(PIC1_CMD_PORT, 0x11);
@@ -45,41 +25,75 @@ void init_interrupts() {
     write_port(PIC1_DATA_PORT, 0x0);
     write_port(PIC2_DATA_PORT, 0x0);
 
-    set_entry_IDT(0x20, (uint32_t)&timer_int_handler, 0x08, 0x8E);
-    set_entry_IDT(0x21, (uint32_t)&keyboard_int_handler, 0x08, 0x8E);
-
     __asm__("sti");
 }
 
 
 
-void load_IDT() {
-    uint16_t IDT_size;
+void _load_interrupt_descriptor_table() {
+    uint32_t idt_size;
 
-    IDT_size = IDT_number * sizeof(struct IDT_entry);
-    IDT_pointer.number = IDT_size - 1;
-    IDT_pointer.base = (uint32_t)&IDT_table;
+    struct {
+        uint16_t number;
+        uint32_t base;
+    } __attribute__((packed)) _idt_pointer;
 
-    memset(IDT_table, 0, IDT_size);
+    idt_size = IDT_number * sizeof(struct interrupt_descriptor_table);
 
-    __asm__ (
+    _idt_pointer.number = idt_size - 1;
+    _idt_pointer.base = (uint32_t)&_idt;
+
+    memset(&_idt, 0, idt_size);
+
+    __asm__ __volatile__(
         "lidt %0"
         :
-        : "m" (IDT_pointer)
+        : "m" (_idt_pointer)
     );
 }
 
 
 
-void set_entry_IDT(uint8_t index, uint32_t base, uint16_t selector, uint8_t type) {
-    __asm__("pushf");
-    __asm__("cli");
+void _register_all_interrupts_handler() {
+    set_interrupt_handler(0x20, (uint32_t)&timer_int_handler, 0x08, 0x8E);
+    set_interrupt_handler(0x21, (uint32_t)&keyboard_int_handler, 0x08, 0x8E);
+}
 
-    IDT_table[index].lowerbits_0_15 = (uint16_t)(base & 0xFFFF);
-    IDT_table[index].selector = selector;
-    IDT_table[index].zero = 0x0;
-    IDT_table[index].type = type;
-    IDT_table[index].higherbits_16_31 = (uint16_t)(base >> 16);
+
+
+void set_interrupt_handler(uint8_t index, uint32_t base, uint16_t selector, uint8_t type) {
+    __asm__ __volatile__(
+        "pushf \n\t"
+        "cli"
+        :
+        :
+    );
+
+    _idt[index].lowerbits_0_15 = (uint16_t)(base & 0xFFFF);
+    _idt[index].selector = selector;
+    _idt[index].zero = 0x0;
+    _idt[index].type = type;
+    _idt[index].higherbits_16_31 = (uint16_t)(base >> 16);
 
     __asm__("popf");
+}
+
+
+
+
+IRQ_HANDLER(timer_int_handler) {
+    (*((char*)(0xB8000 + 79 * 2)))++;
+}
+
+
+
+IRQ_HANDLER(keyboard_int_handler) {
+    uint8_t status;
+    uint8_t key_code;
+
+    key_code = read_port(0x60);
+    status = read_port(0x61);
+    write_port(0x61, status | 1);
+
+    driver_tty_output_char(key_code);
 }
