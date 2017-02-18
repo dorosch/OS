@@ -39,7 +39,7 @@ void driver_tty_clear_screen() {
 void driver_tty_update_cursor() {
     uint16_t location;
 
-    location = (_tty.cursor_y * _tty.width) + _tty.cursor_x;
+    location = (_tty.cursor_y * _tty.width) + (_tty.cursor_x - 1);
 
     write_port(0x3D4, 14);
     write_port(0x3D5, location >> 8);
