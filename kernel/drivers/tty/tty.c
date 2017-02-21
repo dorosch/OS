@@ -3,7 +3,7 @@
 
 
 
-static struct tty_driver_descriptor _tty;
+static struct driver_tty_descriptor _tty;
 
 
 void init_driver_tty() {

@@ -7,7 +7,7 @@
 #include "string.h"
 
 
-struct tty_driver_descriptor {
+struct driver_tty_descriptor {
     uint8_t width;
     uint8_t height;
     uint8_t  cursor_x;
