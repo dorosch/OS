@@ -26,7 +26,7 @@ struct interrupt_descriptor_table {
     uint16_t higherbits_16_31;
 } __attribute__((packed));
 
-struct interrupt_descriptor_table _idt[IDT_number];
+extern struct interrupt_descriptor_table _idt[];
 
 
 void init_interrupts();

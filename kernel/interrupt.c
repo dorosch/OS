@@ -1,6 +1,7 @@
 #include "kernel/interrupt.h"
 
 
+struct interrupt_descriptor_table _idt[IDT_number];
 
 
 void init_interrupts() {
